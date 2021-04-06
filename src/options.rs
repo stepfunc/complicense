@@ -4,8 +4,11 @@ use structopt::StructOpt;
 #[structopt(name = "complicense", about = "OSS license report generator")]
 pub(crate) struct Options {
     /// input JSON file from cargo-license
-    #[structopt(short = "i", long = "input")]
-    pub(crate) input_file: String,
+    #[structopt(short = "c", long = "config")]
+    pub(crate) config_file: String,
+    /// imported JSON file from cargo-license
+    #[structopt(short = "i", long = "import")]
+    pub(crate) import_file: String,
     /// output dependency report with license information
     #[structopt(short = "o", long = "output")]
     pub(crate) output_file: String,

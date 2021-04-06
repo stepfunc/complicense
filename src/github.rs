@@ -43,7 +43,7 @@ fn get_coordinates(entry: &crate::import::Entry) -> Result<Coordinates, &'static
 }
 
 fn get_raw_coordinates(suffix: &str) -> Result<Coordinates, &'static str> {
-    let tokens: Vec<&str> = suffix.split("/").collect();
+    let tokens: Vec<&str> = suffix.split('/').collect();
 
     if tokens.len() < 2 {
         return Err("insufficient tokens in github URL");

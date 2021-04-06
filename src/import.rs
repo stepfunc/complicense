@@ -6,23 +6,28 @@ use std::path::Path;
 #[derive(Deserialize)]
 pub(crate) struct Entry {
     pub(crate) name: String,
-    pub(crate) version: String,
+    //pub(crate) version: String,
     pub(crate) authors: String,
+    pub(crate) license: Option<String>,
     pub(crate) repository: Option<String>,
     pub(crate) description: Option<String>,
 }
 
 // the type we return
+#[derive(Debug, Clone, Deserialize)]
 pub(crate) struct LicenseData {
     // name of the license
-    pub(crate) name: String,
+    pub(crate) license_name: String,
     // decoded license file content
     pub(crate) file_content: String,
 }
 
 impl LicenseData {
     pub(crate) fn new(name: String, file_content: String) -> Self {
-        Self { name, file_content }
+        Self {
+            license_name: name,
+            file_content,
+        }
     }
 }
 
