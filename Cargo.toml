@@ -1,0 +1,14 @@
+[package]
+name = "complicense"
+version = "0.1.0"
+authors = ["jadamcrain <jadamcrain@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = { version = "1.0.125", features = ["derive"] }
+serde_json = "1.0.64"
+structopt = { version = "0.3" }
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+base64 = "0.13.0"
