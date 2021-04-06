@@ -6,15 +6,31 @@ use std::path::Path;
 
 use crate::import::LicenseData;
 
-// lookup table for manually configured license information
 #[derive(Debug, Deserialize)]
 pub(crate) struct Configuration {
+    /// list of crates to ignore
+    ignore: Vec<String>,
+    /// whitelist of allowed licenses
+    allowed_licenses: Vec<String>,
+    /// lookup table for manually configured license information
     crates: HashMap<String, LicenseData>,
 }
 
 impl Configuration {
     pub(crate) fn get_license_data(&self, crate_name: &str) -> Option<&LicenseData> {
         self.crates.get(crate_name)
+    }
+
+    pub(crate) fn verify_allowed(&self, license: &str) -> Result<(), Box<dyn std::error::Error>> {
+        if self.allowed_licenses.contains(&license.to_owned()) {
+            Ok(())
+        } else {
+            Err(format!("License not allowed: {}", license).into())
+        }
+    }
+
+    pub(crate) fn ignore(&self, name: &str) -> bool {
+        self.ignore.contains(&name.to_owned())
     }
 }
 

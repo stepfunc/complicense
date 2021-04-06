@@ -22,15 +22,6 @@ pub(crate) struct LicenseData {
     pub(crate) file_content: String,
 }
 
-impl LicenseData {
-    pub(crate) fn new(name: String, file_content: String) -> Self {
-        Self {
-            license_name: name,
-            file_content,
-        }
-    }
-}
-
 pub(crate) fn read_import_file<P: AsRef<Path>>(
     path: P,
 ) -> Result<Vec<Entry>, Box<dyn std::error::Error>> {

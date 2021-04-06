@@ -1,4 +1,3 @@
-use crate::import::LicenseData;
 use reqwest::header::{ACCEPT, AUTHORIZATION, USER_AGENT};
 use serde::Deserialize;
 
@@ -55,10 +54,10 @@ fn get_raw_coordinates(suffix: &str) -> Result<Coordinates, &'static str> {
     })
 }
 
-pub(crate) fn get_license(
+pub(crate) fn get_license_text(
     entry: &crate::import::Entry,
     oauth_token: &str,
-) -> Result<LicenseData, Box<dyn std::error::Error>> {
+) -> Result<String, Box<dyn std::error::Error>> {
     let coord = get_coordinates(entry)?;
 
     let client = reqwest::blocking::Client::new();
@@ -80,5 +79,5 @@ pub(crate) fn get_license(
     let bytes = base64::decode(&stripped)?;
     let license_text = std::str::from_utf8(&bytes)?;
 
-    Ok(LicenseData::new(info.license.name, license_text.to_owned()))
+    Ok(license_text.to_owned())
 }

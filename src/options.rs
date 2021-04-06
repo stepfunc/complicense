@@ -9,12 +9,6 @@ pub(crate) struct Options {
     /// imported JSON file from cargo-license
     #[structopt(short = "i", long = "import")]
     pub(crate) import_file: String,
-    /// output dependency report with license information
-    #[structopt(short = "o", long = "output")]
-    pub(crate) output_file: String,
-    /// list of crates to ignore
-    #[structopt(short = "g", long = "ignore")]
-    pub(crate) ignore_list: Vec<String>,
     #[structopt(short = "t", long = "token")]
     /// github access token
     pub(crate) oauth_token: String,
