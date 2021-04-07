@@ -10,8 +10,11 @@ cargo run -- --import dependencies.json --config config.json  --token "<GITHUB O
 The import file is the JSON output from [`cargo-license`](https://crates.io/crates/cargo-license), e.g.:
 
 ```
-> cargo license --avoid-dev-deps --avoid-build-deps -j > dependencies.json
+> cargo-license --avoid-dev-deps --avoid-build-deps -j > dependencies.json
 ```
+
+Note: Run the `cargo-license` command on Linux, because windows doesn't properly encode the file as UTF-8 by default and then
+the serde parsing fails when importing into `complicense`.
 
 Configuration is specified in the format:
 
