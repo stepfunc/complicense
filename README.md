@@ -25,7 +25,7 @@ Configuration is specified in the format:
   "crates": {
     "<crate name>" : {
       "license_name": "<license name>",
-      "file_content": "<base64 encoded license text"
+      "file_content": "<base64 license text>"
     }
   }
 }
