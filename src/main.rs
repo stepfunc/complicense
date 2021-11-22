@@ -3,20 +3,33 @@ pub(crate) mod github;
 pub(crate) mod import;
 pub(crate) mod options;
 
-use crate::config::Configuration;
 use crate::options::Options;
 use std::collections::HashSet;
+use std::error::Error;
 use structopt::StructOpt;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let options = Options::from_args();
-    let config: Configuration = config::read_config_file(options.config_file)?;
-    let entries = import::read_import_file(options.import_file)?;
+
+    let config = match config::read_config_file(options.config_file) {
+        Ok(config) => config,
+        Err(err) => {
+            eprintln!("error reading config file: {}", err);
+            return Err(err);
+        }
+    };
+    let entries = match import::read_import_file(options.import_file) {
+        Ok(x) => x,
+        Err(err) => {
+            eprintln!("error reading dependencies file: {}", err);
+            return Err(err);
+        }
+    };
 
     // some crates may be used twice with two different versions
     let mut processed: HashSet<String> = HashSet::new();
 
-    for entry in entries {
+    for entry in entries.iter() {
         if config.ignore(&entry.name) {
             continue;
         }
@@ -32,7 +45,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .clone()
             .unwrap_or_else(|| "none specified".to_owned());
         println!("repository: {}", repo);
-        println!("authors: {}", entry.authors);
+        println!(
+            "authors: {}",
+            entry
+                .authors
+                .clone()
+                .unwrap_or_else(|| "not specified".to_string())
+        );
         println!(
             "description: {}",
             entry
@@ -53,7 +72,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             None => {
                 println!("license: {}", crate_license);
                 config.verify_allowed(&crate_license)?;
-                crate::github::get_license_text(&entry, &options.oauth_token)?
+                crate::github::get_license_text(entry, &options.oauth_token)?
             }
         };
 

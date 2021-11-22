@@ -6,8 +6,7 @@ use std::path::Path;
 #[derive(Deserialize)]
 pub(crate) struct Entry {
     pub(crate) name: String,
-    //pub(crate) version: String,
-    pub(crate) authors: String,
+    pub(crate) authors: Option<String>,
     pub(crate) license: Option<String>,
     pub(crate) repository: Option<String>,
     pub(crate) description: Option<String>,

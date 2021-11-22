@@ -3,7 +3,7 @@ use structopt::StructOpt;
 #[derive(Debug, StructOpt)]
 #[structopt(name = "complicense", about = "OSS license report generator")]
 pub(crate) struct Options {
-    /// input JSON file from cargo-license
+    /// input configuration file
     #[structopt(short = "c", long = "config")]
     pub(crate) config_file: String,
     /// imported JSON file from cargo-license

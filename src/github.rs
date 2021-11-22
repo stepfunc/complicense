@@ -2,16 +2,8 @@ use reqwest::header::{ACCEPT, AUTHORIZATION, USER_AGENT};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-struct LicenseField {
-    key: String,
-    name: String,
-    spdx_id: String,
-}
-
-#[derive(Debug, Deserialize)]
 struct LicenseInfo {
     pub(crate) content: String,
-    pub(crate) license: LicenseField,
 }
 
 #[derive(Debug)]
