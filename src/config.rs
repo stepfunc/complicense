@@ -5,6 +5,8 @@ use std::io::BufReader;
 use std::path::Path;
 
 use crate::import::LicenseData;
+use spdx::expression::{ExprNode, Operator};
+use spdx::{Expression, LicenseItem};
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct Configuration {
@@ -22,11 +24,34 @@ impl Configuration {
     }
 
     pub(crate) fn verify_allowed(&self, license: &str) -> Result<(), Box<dyn std::error::Error>> {
-        if self.allowed_licenses.contains(&license.to_owned()) {
-            Ok(())
-        } else {
-            Err(format!("License not allowed: {}", license).into())
+        let expr = match Expression::parse(license) {
+            Ok(expr) => expr,
+            Err(err) => return Err(format!("SPDX parse error: {}", err).into()),
+        };
+
+        let licenses: Result<Vec<String>, _> = expr
+            .iter()
+            .flat_map(|x| match x {
+                ExprNode::Op(op) => match op {
+                    Operator::And => Some(Err("SPDX AND operator not allowed".to_string())),
+                    Operator::Or => None,
+                },
+                ExprNode::Req(lic) => match &lic.req.license {
+                    LicenseItem::Spdx { id, or_later: _ } => Some(Ok(id.name.to_string())),
+                    LicenseItem::Other { .. } => {
+                        Some(Err("SDPX other license types not allowed".to_string()))
+                    }
+                },
+            })
+            .collect();
+
+        let licenses = licenses?;
+
+        if !licenses.iter().any(|x| self.allowed_licenses.contains(x)) {
+            return Err(format!("Could not find allowed license for: {}", license).into());
         }
+
+        Ok(())
     }
 
     pub(crate) fn ignore(&self, name: &str) -> bool {
