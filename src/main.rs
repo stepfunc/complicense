@@ -65,8 +65,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         let license_content: String = match config.get_license_data(&entry.name) {
             Some(data) => {
                 // use the license we look up
-                println!("license: {}", data.license_name);
-                data.file_content.clone()
+                println!("license: {}", data.name());
+                data.content()?
             }
             // if it's not in the configuration, grab the data from github API
             None => {

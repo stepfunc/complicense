@@ -12,15 +12,6 @@ pub(crate) struct Entry {
     pub(crate) description: Option<String>,
 }
 
-// the type we return
-#[derive(Debug, Clone, Deserialize)]
-pub(crate) struct LicenseData {
-    // name of the license
-    pub(crate) license_name: String,
-    // decoded license file content
-    pub(crate) file_content: String,
-}
-
 pub(crate) fn read_import_file<P: AsRef<Path>>(
     path: P,
 ) -> Result<Vec<Entry>, Box<dyn std::error::Error>> {
